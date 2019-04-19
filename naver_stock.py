@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from multiprocessing import Pool, cpu_count
+import FinanceDataReader as fdr
+
 
 import requests
 import pandas as pd
@@ -33,26 +35,26 @@ kosdaq_info = pd.read_csv("./market_info/kosdaq.csv", index_col=0)
 date_info = pd.read_csv("./market_info/date_df.csv", index_col=0)["dt"]
 date_info = pd.to_datetime(date_info, format="%Y%m%d").sort_values(ascending=True).reset_index(drop=True)
 
-kospi_list = pd.Series(kospi_info[kospi_info["section"] == 1].index).apply(lambda x: x[1:])
-kosdaq_list = pd.Series(kosdaq_info[kosdaq_info["section"] == 1].index).apply(lambda x: x[1:])
+kospi_list = fdr.StockListing("KOSPI")["Symbol"]
+kosdaq_list = fdr.StockListing("KOSDAQ")["Symbol"]
 
 df_kospi = pool_crawl(kospi_list)
 df_kosdaq = pool_crawl(kosdaq_list)
 
-df_open_kospi = pd.DataFrame(columns=kospi_list)
-df_close_kospi = pd.DataFrame(columns=kospi_list)
-df_high_kospi = pd.DataFrame(columns=kospi_list)
-df_low_kospi = pd.DataFrame(columns=kospi_list)
-df_rtn_kospi = pd.DataFrame(columns=kospi_list)
-df_vol_kospi = pd.DataFrame(columns=kospi_list)
+df_open_kospi = pd.DataFrame(columns=kospi_list, index=date_info)
+df_close_kospi = pd.DataFrame(columns=kospi_list, index=date_info)
+df_high_kospi = pd.DataFrame(columns=kospi_list, index=date_info)
+df_low_kospi = pd.DataFrame(columns=kospi_list, index=date_info)
+df_rtn_kospi = pd.DataFrame(columns=kospi_list, index=date_info)
+df_vol_kospi = pd.DataFrame(columns=kospi_list, index=date_info)
 
 
-df_open_kosdaq = pd.DataFrame(columns=kosdaq_list)
-df_close_kosdaq = pd.DataFrame(columns=kosdaq_list)
-df_high_kosdaq = pd.DataFrame(columns=kosdaq_list)
-df_low_kosdaq = pd.DataFrame(columns=kosdaq_list)
-df_rtn_kosdaq = pd.DataFrame(columns=kosdaq_list)
-df_vol_kosdaq = pd.DataFrame(columns=kosdaq_list)
+df_open_kosdaq = pd.DataFrame(columns=kosdaq_list, index=date_info)
+df_close_kosdaq = pd.DataFrame(columns=kosdaq_list, index=date_info)
+df_high_kosdaq = pd.DataFrame(columns=kosdaq_list, index=date_info)
+df_low_kosdaq = pd.DataFrame(columns=kosdaq_list, index=date_info)
+df_rtn_kosdaq = pd.DataFrame(columns=kosdaq_list, index=date_info)
+df_vol_kosdaq = pd.DataFrame(columns=kosdaq_list, index=date_info)
 
 for x, y in zip(df_kospi, kospi_list):
     df_open_kospi[y] = x["ov"]
@@ -70,14 +72,17 @@ for x, y in zip(df_kosdaq, kosdaq_list):
     df_rtn_kosdaq[y] = x["cr"] / 100
     df_vol_kospi[y] = x["aq"]
     
-df_open_kospi.to_csv("kospi_open.csv")
-df_close_kospi.to_csv("kospi_close.csv")
-df_high_kospi.to_csv("kospi_high.csv")
-df_low_kospi.to_csv("kospi_low.csv")
-df_rtn_kospi.to_csv("kospi_rtn.csv")
+    
+df_open_kospi.to_csv("./naver_stock/kospi_open.csv")
+df_close_kospi.to_csv("./naver_stock/kospi_close.csv")
+df_high_kospi.to_csv("./naver_stock/kospi_high.csv")
+df_low_kospi.to_csv("./naver_stock/kospi_low.csv")
+df_rtn_kospi.to_csv("./naver_stock/kospi_rtn.csv")
+df_vol_kospi.to_csv("./naver_stock/kospi_vol.csv")
 
-df_open_kosdaq.to_csv("kosdaq_open.csv")
-df_close_kosdaq.to_csv("kosdaq_close.csv")
-df_high_kosdaq.to_csv("kosdaq_high.csv")
-df_low_kosdaq.to_csv("kosdaq_low.csv")
-df_rtn_kosdaq.to_csv("kosdaq_rtn.csv")
+df_open_kosdaq.to_csv("./naver_stock/kosdaq_open.csv")
+df_close_kosdaq.to_csv("./naver_stock/kosdaq_close.csv")
+df_high_kosdaq.to_csv("./naver_stock/kosdaq_high.csv")
+df_low_kosdaq.to_csv("./naver_stock/kosdaq_low.csv")
+df_rtn_kosdaq.to_csv("./naver_stock/kosdaq_rtn.csv")
+df_vol_kosdaq.to_csv("./naver_stock/kosdaq_vol.csv")
