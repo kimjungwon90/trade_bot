@@ -2,6 +2,13 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
+
+def to_float(element):
+    if (type(element) == str) and (len(element) != 0):
+        res = element.replace('\"', "")
+        return float(res)
+
+    
 url_1 = "http://marketdata.krx.co.kr/contents/COM/GenerateOTP.jspx?name=fileDown&filetype=csv&url=MKD/13/1301/13010302/mkd13010302&type=6&ind_type=1300&period_strt_dd=20000101&period_end_dd=20190416&pagePath=%2Fcontents%2FMKD%2F13%2F1301%2F13010302%2FMKD13010302.jsp"
 response = requests.get(url_1)
 
@@ -24,11 +31,6 @@ parsing_df = [x.split(",") for x in parsing_df]
 parsing_df = pd.DataFrame(parsing_df[1:], columns=columns)
 parsing_df.index = parsing_df["dt"]
 parsing_df.drop("dt", axis=1, inplace=True)
-
-def to_float(element):
-    if (type(element) == str) and (len(element) != 0):
-        res = element.replace('\"', "")
-        return float(res)
 
 for column in parsing_df.columns:
     parsing_df[column] = parsing_df[column].apply(to_float).astype("float32")
