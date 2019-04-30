@@ -18,7 +18,7 @@ class krx_indus_index():
     def __init__(self):
         pass
     
-    def get_df_by_code(self, start="19000101", end="30000101", index_no="5300"):
+    def(self, start="19000101", end="30000101", index_no="5300"):
         self.url = self.base_url.format(index_no, start, end)
         response = requests.get(self.url)
         download_url = "http://file.krx.co.kr/download.jspx"
@@ -34,4 +34,7 @@ class krx_indus_index():
         parsing.drop("date", axis=1, inplace=True)
         self.data = parsing.astype("float64")
         return self.data
+    
+    def get_all_index(self, start="19000101", end="30000101"):
+        pass
         
