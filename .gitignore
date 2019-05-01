@@ -105,4 +105,4 @@ venv.bak/
 
 # csv
 ./naver_stock/*
-*.csv
+
