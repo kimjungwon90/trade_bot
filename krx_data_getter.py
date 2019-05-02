@@ -58,11 +58,30 @@ class krx_vkospi():
         self.data = parsing.astype("float64")
         return self.data
 
-#%%
-test_api = krx_vkospi()
-vkospi = test_api.get_index()
 
 #%%
-vkospi.dropna()
+class krx_stocks():
 
-#%%
+    def __init__(self):
+        self.base_url = "http://marketdata.krx.co.kr/contents/COM/GenerateOTP.jspx?name=fileDown&filetype=csv&url=MKD/04/0402/04020100/mkd04020100t3_02&isu_cdnm={}&isu_nm={}&fromdate={}&todate={}&pagePath=%2Fcontents%2FMKD%2F04%2F0402%2F04020100%2FMKD04020100T3T2.jsp"
+        self.columns = ["date", "close", "chg", "vol", "vol_won", "open", "high", "low", "cap", "issue"]
+        pass
+
+    def get_stock(self, code="A005930", start="19000101", end="30000101"):
+        url = self.base_url.format(code, code[1:], code, start, end)
+        response = requests.get(url)
+        download_url = "http://file.krx.co.kr/download.jspx"
+        json_data = {"code": response.content}
+        headers_json = {"Referer": "http://marketdata.krx.co.kr/contents/MKD/99/MKD9900001.jspx"}
+        data = requests.post(download_url, data=json_data, headers=headers_json)
+        parsing = BeautifulSoup(data.text)
+        parsing = parsing.text.split("\n")
+        parsing = [line.replace(",", "").strip('"').replace('""', '"') for line in parsing]
+        parsing = [x.split('"') for x in parsing]
+        self.parse = parsing
+        parsing = pd.DataFrame(parsing[1:], columns=self.columns)
+        parsing.index = pd.to_datetime(parsing["date"], format="%Y/%m/%d")
+        parsing.drop("date", axis=1, inplace=True)
+        self.data = parsing.astype("float64")
+        return self.data
+
