@@ -1,3 +1,4 @@
+#%%
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -40,7 +41,7 @@ class krx_vkospi():
         self.df_columns = ["date", "close", "chg", "%chg", "open", "high", "low"]
         pass
 
-    def get_index(self, start, end):
+    def get_index(self, start="19000101", end="30000101"):
         url = self.base_url.format(start, end)
         response = requests.get(url)
         download_url = "http://file.krx.co.kr/download.jspx"
@@ -56,3 +57,12 @@ class krx_vkospi():
         parsing.drop("date", axis=1, inplace=True)
         self.data = parsing.astype("float64")
         return self.data
+
+#%%
+test_api = krx_vkospi()
+vkospi = test_api.get_index()
+
+#%%
+vkospi.dropna()
+
+#%%
