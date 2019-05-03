@@ -1,5 +1,6 @@
 #%%
 import requests
+import pandas as pd
 
 
 class fisis_api:
@@ -23,6 +24,6 @@ test = test_api.get_stats("L", "B")
 
 
 #%%
-test.json()["result"]["list"]
+pd.DataFrame(test.json()["result"]["list"])
 
 #%%
