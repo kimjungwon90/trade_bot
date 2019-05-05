@@ -10,7 +10,7 @@ from naver_crawler import naver_stock_crawler as naver
 sns.set()
 sns.set_style("white")
 #%%
-naver_api = naver()1
+naver_api = naver()
 test_api = fisis_api()
 accounts = pd.read_csv("./fisis_core/accounts.csv")
 comps_list = pd.read_csv("./fisis_core/comps_list.csv")
@@ -56,7 +56,7 @@ banks_data = dict()
 for name in banks_names:
     print(name)
     try:
-        data = test_api.get_data(name, stat, "Q", "200812", "201812")
+        data = test_api.get_data(name, "SA023", "Q", "200812", "201812")
         data = pd.DataFrame(data)
         new_df = data.pivot(index="base_month", columns="account_nm", values="a")
         new_df.index = pd.to_datetime(new_df.index, format="%Y%m")
