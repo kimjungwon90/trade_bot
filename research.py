@@ -10,7 +10,7 @@ from naver_crawler import naver_stock_crawler as naver
 sns.set()
 sns.set_style("white")
 #%%
-naver_api = naver()
+naver_api = naver()1
 test_api = fisis_api()
 accounts = pd.read_csv("./fisis_core/accounts.csv")
 comps_list = pd.read_csv("./fisis_core/comps_list.csv")
