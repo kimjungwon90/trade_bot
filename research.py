@@ -72,27 +72,4 @@ for name in banks_names:
 #%%
 df_concat = pd.concat(banks_data, axis=1, names=["comp", "stat", "acc"])
 
-#%%
-plt.figure(figsize=(20, 16))
-df_concat.sum(level="acc", axis=1).pct_change().corr().to_csv("./test.xlsx")
 
-
-
-#%%
-stats_df = pd.read_csv("./fisis_core/stats_list.csv")
-
-#%%
-stats = stats_df[stats_df["lrg_div_nm"] == "국내은행"]["list_no"]
-#%%
-len(banks_names)
-
-#%%
-df_concat
-
-#%%
-banks_data
-
-#%%
-banks_data
-
-#%%
