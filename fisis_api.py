@@ -32,29 +32,17 @@ class fisis_api:
         response = pd.DataFrame(response.json()["result"]["list"])
         return response
 
+    def get_data(self, company_code, stat_code, period, start, end):
+        url_ext = "statisticsInfoSearch.json?lang=kr&auth={}&financeCd={}&listNo={}&term={}&startBaseMm={}&endBaseMm={}"
+        url = self.base_url + url_ext.format(self.key, company_code, stat_code, period, start, end)
+        response = requests.get(url).json()["result"]
+        if response["err_cd"] != "000":
+            raise ValueError(response["err_msg"])
+        else:
+            self.unit = response["unit"]
+            response = response["list"]
+        return response
+
 
 #%%
-test_api = fisis_api()
 
-
-#%%
-df_stats = pd.read_csv("./fisis_core/stats_list.csv", index_col=0)
-
-#%%
-list_nos = df_stats["list_no"]
-
-#%%
-df_stats = pd.DataFrame()
-div = ["A", "J", "H", "I", "F", "W", "G", "X", "D", "C", "K", "T", "N", "E", "O", "Q", "P", "S", "M", "L", "B", "R"]
-stats = ["A", "B", "C", "D", "P"] 
-for div in divs:
-    for stat in stats:
-        try:
-            test = test_api.get_stats(div, stat)
-            df_stats = df_stats.append(test, ignore_index=True)
-        except Exception as e:
-            print(e)
-
-#%%
-df_stats.to_csv("./fisis_core/stats_list.csv", index=False)
-#%%
