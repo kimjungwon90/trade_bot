@@ -106,4 +106,4 @@ venv.bak/
 # csv
 ./naver_stock/*
 
-.vscode/settings.json
+.vscode/*
