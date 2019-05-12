@@ -3,9 +3,16 @@ import pandas as pd
 import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 from fisis_api import fisis_api
 import fin_data_clean as dc
 from naver_crawler import naver_stock_crawler as naver
+
+mpl.font_manager._rebuild()
+
+mpl.rcParams["font.family"] = "NanumGothicCoding"
+pd.Series(range(50)).plot()
+plt.title("한글")
 
 sns.set()
 sns.set_style("white")
@@ -25,6 +32,8 @@ df_test = df_test.astype("float64")
 naver_api.get_stock(code="105560")
 
 #%%
+plt.rcParams["font.family"] = "NanumGothicCoding"
+plt.rcParams["axes.unicode_minus"] = False
 plt.figure(figsize=(30,30))
 df_growth = df_test.dropna(how="any", axis=1).pct_change()
 df_growth.loc["2011-05-15"] = df_growth.mean(axis=0)
