@@ -72,4 +72,6 @@ def frac_dff_ffd(series, d, thres=1e-4):
 def test(test):
     return test
 
+def test_jw(test):
+    pass
 
