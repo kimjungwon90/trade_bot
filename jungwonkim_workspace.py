@@ -51,3 +51,39 @@ def fetch_data(connection, table_name, date_from, date_to):
 
 
 xx = fetch_data('con_2', 'INDEX_SET_BDAY', '2019-01-01', '2019-03-31')
+
+#%%
+import naver_crawler as naver
+
+nv = naver.naver_stock_crawler()
+stock_price = nv.get_stock(code="005930")
+samsung = stock_price['ncv']
+
+period=20
+x = samsung[-period:]
+
+def willr(price_series, look_back):
+    close = price_series[-1]
+    highest_high = max(price_series[-period:])
+    lowest_low = min(price_series[-period:]) 
+    r = -100*((highest_high-close)/(highest_high-lowest_low))
+
+    return r
+
+def technical_trade(price_series, indicator, look_back=20, buy_threshold=20, sell_threshold=80):
+    current = price_series[-1]
+    indicate = indicator(price_series, look_back)
+
+    if indicate > sell_threshold:
+        signal = -1
+    elif indicate < buy_threshold:
+        signal = 1
+    else :
+        signal = 0
+    
+    return signal
+
+map(willr, samsung)
+
+
+
