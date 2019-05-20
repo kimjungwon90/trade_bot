@@ -110,3 +110,5 @@ venv.bak/
 # vscode env
 ./.vscode/*
 
+chanmin_workspace.py
+.vscode/settings.json
