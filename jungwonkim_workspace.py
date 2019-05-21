@@ -62,7 +62,7 @@ samsung = stock_price['ncv']
 period=20
 x = samsung[-period:]
 
-def willr(price_series, look_back):
+def willr(price_series, look_back=20):
     close = price_series[-1]
     highest_high = max(price_series[-period:])
     lowest_low = min(price_series[-period:]) 
@@ -83,7 +83,8 @@ def technical_trade(price_series, indicator, look_back=20, buy_threshold=20, sel
     
     return signal
 
-map(willr, samsung)
+x = samsung.map(willr)
 
+type(samsung)
 
 
