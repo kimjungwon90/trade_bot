@@ -30,3 +30,4 @@ class naver_stock_crawler:
         self.data = df_stock
         print("{} Done.".format(code))
         return df_stock
+
