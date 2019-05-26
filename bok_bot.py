@@ -22,7 +22,7 @@ class bok_api:
         result = pd.DataFrame(result.json()["StatisticTableList"]["row"])
         self.table = result
     
-    def get_stat_list_detail(self, rows=1000, stat_code=""):
+    def get_stat_list_detail(self, stat_code="", rows=1000):
         if stat_code == "":
             raise ValueError("Stat code not provided! Please insert stat code!")
         url = self.url_base + "StatisticItemList/{}/json/kr/0/{}/{}".format(self.key, str(rows), stat_code)
@@ -31,7 +31,7 @@ class bok_api:
         result = pd.DataFrame(result.json()["StatisticItemList"]["row"])
         self.table_detail = result
     
-    def get_stat_data(self, rows=10000, start="19000101", end="30000101", item_code="", stat_code=""):
+    def get_stat_data(self, item_code, stat_code="", rows=10000, start="19000101", end="30000101"):
         if item_code == "":
             raise ValueError("Item code not provided! Please insert item code!")
         if stat_code != "":
@@ -44,6 +44,6 @@ class bok_api:
         result = pd.DataFrame(result.json()["StatisticSearch"]["row"])
         self.data = result[["TIME", "DATA_VALUE"]]
         self.data.index = pd.to_datetime(self.data["TIME"], format=data_format)
-        self.data = self.data["DATA_VALUE"].replace("", np.nan)
+        self.data = self.data["DATA_VALUE"].replace("", np.nan).astype("float64")
         return self.data
 
