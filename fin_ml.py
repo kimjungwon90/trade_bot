@@ -1,4 +1,4 @@
-import pandas as pd
+eimport pandas as pd
 import numpy as np
 import matplotlib as mpl
 
@@ -69,4 +69,9 @@ def frac_dff_ffd(series, d, thres=1e-4):
     df = pd.concat(df, axis=1)
     return df
 
+def test(test):
+    return test
+
+def test_jw(test):
+    pass
 
