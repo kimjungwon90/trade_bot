@@ -41,9 +41,11 @@ class bok_api:
         data_format = self.data_format[self.period]
         url = self.url_base + "StatisticSearch/{}/json/kr/0/{}/{}/{}/{}/{}/{}".format(self.key, rows, self.stat_code, self.period, start, end, self.item_code)
         result = requests.get(url)
+        unit = result.json()["StatisticSearch"]["row"][0]["UNIT_NAME"]
         result = pd.DataFrame(result.json()["StatisticSearch"]["row"])
-        self.data = result[["TIME", "DATA_VALUE"]]
-        self.data.index = pd.to_datetime(self.data["TIME"], format=data_format)
-        self.data = self.data["DATA_VALUE"].replace("", np.nan).astype("float64")
-        return self.data
+        result = result[["TIME", "DATA_VALUE"]]
+        result.index = pd.to_datetime(result["TIME"], format=data_format)
+        result = result["DATA_VALUE"].replace("", np.nan).astype("float64")
+        result.rename({"DATA_VALUE":"DATA_VALUE ({})".format(unit)})
+        return result
 
