@@ -27,7 +27,12 @@ class naver_stock_crawler:
         df_stock = pd.DataFrame(response.json()["result"]["list"])
         df_stock.index = pd.to_datetime(df_stock["dt"], format="%Y%m%d").reset_index(drop=True)
         df_stock = df_stock.sort_index().drop("dt", axis=1)
+        df_stock.columns = ["vol", "chg%", "chg_net", "high", "low", "close", "open", "rf"]
+        df_stock["chg%"] = df_stock["chg%"] / 100
         self.data = df_stock
         print("{} Done.".format(code))
         return df_stock
 
+
+
+#%%
