@@ -106,10 +106,17 @@ venv.bak/
 # csv
 ./naver_stock/*
 
+<<<<<<< HEAD
+.vscode/*
+=======
 
 # vscode env
 ./.vscode/*
 
 chanmin_workspace.py
 .vscode/settings.json
+<<<<<<< desktop
 cm_jun_res_ch_4.py
+=======
+>>>>>>> 444f58acb1c9f44b5f645a2e100b7d9590257d6b
+>>>>>>> master
