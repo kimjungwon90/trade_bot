@@ -5,7 +5,7 @@ import pandas as pd
 
 class fisis_api:
 
-    key = "3b7633c9e5d1e65d67a4831fd0592293"
+    key = input("insert fisis api key : ")
     base_url = "http://fisis.fss.or.kr/openapi/"
 
     def __init__(self):

@@ -6,7 +6,7 @@ from matplotlib import rc
 
 class bok_api:
 
-    key = "RK4O8KBR4N0O4E2W6V9E"
+    key = input("insert BOK api key : ")
     url_base = "http://ecos.bok.or.kr/api/"
     table = None
     stat_code = None

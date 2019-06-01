@@ -1,19 +1,66 @@
 #%%
+import os
+import warnings
+
+os.chdir("/home/chanmin/trade_bot")
+
 import matplotlib.pyplot as plt
-import pandas as pd
 import numpy as np
+import pandas as pd
 import seaborn as sns
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
+import FinanceDataReader as fdr
 
 import naver_crawler
 import technicals
+
+kospi_200 = pd.read_csv("./kospi_200_list/kospi_200_list.csv", header=None)
+
+
+warnings.filterwarnings("ignore")
 
 sns.set_style("white")
 
 test_api = naver_crawler.naver_stock_crawler()
 test_data = test_api.get_stock("069500").loc["2010-06-01":, :]
 
+krx_list = fdr.StockListing("KRX")
+
+#%%
+money_index = technicals.money_flow_index(test_data["high"], test_data["low"], test_data["close"], test_data["vol"], period=21)
+test_data["mfi"] = money_index
+test_data["signal"] = np.nan
+test_data["signal"][money_index < 10] = -1
+test_data["signal"][money_index > 90] = +1
+test_data.ffill(inplace=True)
+
+backtest_rtn = np.log(1+(test_data["signal"] * test_data["chg%"].shift(-2))).rolling(5).mean()
+backtest_rtn.cumsum().plot()
+#%%
+rsi_index = technicals.rsi(test_data["close"])
+test_data["rsi"] = rsi_index
+test_data["signal"] = np.nan
+test_data["signal"][rsi_index < 20] = 1
+test_data["signal"][rsi_index > 80] = -1
+test_data["signal"].ffill(inplace=True)
+test_data["test_rtn"] = test_data["signal"] * test_data["chg%"].shift(-2)
+test_data["cumul"] = (1 + test_data["test_rtn"]).cumprod()
+test_data["cumul"].plot()
+
+#%%
+stochastic_i = technicals.stochastic(test_data["close"], test_data["high"], test_data["low"])
+test_data["stochastic_k"] = stochastic_i[0]
+test_data["stochastic_d"] = stochastic_i[1]
+test_data["stochastic_d_3"] = stochastic_i[2]
+test_data["signal"] = np.nan
+test_data["signal"][test_data["stochastic_d"] > 80] = -1
+test_data["signal"][test_data["stochastic_d"] < 20] = + 1
+test_data["signal"].ffill(inplace=True)
+test_data["test_rtn"] = test_data["signal"] * test_data["chg%"].shift(-2)
+test_data["cumul"] = (1 + test_data["test_rtn"]).cumprod()
+test_data["cumul"].plot()
+#%%
 ichi_moku = technicals.ichimoku(test_data["hv"], test_data["lv"], test_data["ncv"])
 
 df_test = pd.DataFrame()
